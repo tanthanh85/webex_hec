@@ -1,12 +1,13 @@
 import requests
 
-splunk_instance = "https://192.168.50.18:8089"
+splunk_instance = "https://127.0.0.1:8089"
 username = "admin"
-password = ""
+password = "C1sco12345"
+public_ip="173.39.116.4/30"
 
 def get_total_participants():
     # Search query to get the totalparticipantcount from the last 5 minutes
-    search_query = 'search index=Webex ip="14.191.94.60/30" earliest=-5m | head 1 | stats latest(totalparticipantcount) as TotalParticipant'
+    search_query = f'search index=Webex ip={public_ip} earliest=-5m | head 1 | stats latest(totalparticipantcount) as TotalParticipant'
 
     # Prepare the Splunk API request
     url = f"{splunk_instance}/services/search/jobs"

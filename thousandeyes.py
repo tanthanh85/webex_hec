@@ -5,11 +5,15 @@ urllib3.disable_warnings()
 import time
 import json
 
-headers = {
-  'Authorization': ''
-}
+thousandeyes_token='1f82e605-518c-4d6e-8865-fc40ab903318'
 testId= "296995"
-splunk_token=''
+splunk_token='8626afc9-5d78-4d21-ab0e-d8020ba1e91b'
+headers = {
+  'Authorization': f'Bearer {thousandeyes_token}'
+}
+
+
+
 
 def get_latency_to_webex():
     payload={}  
@@ -24,7 +28,7 @@ def get_latency_to_webex():
     
 
 def send_to_splunk(data):  
-    url='https://192.168.50.18:8088/services/collector/event'
+    url='https://127.0.0.1:8088/services/collector/event'
     headers = {"Authorization": "Splunk "+splunk_token,
     "Content-Type":"application/json"}
     print(data)
@@ -39,7 +43,7 @@ if __name__=='__main__':
             send_to_splunk(data)
         else:
             print('nothing to send to Splunk')
-        time.sleep(60)
+        time.sleep(30)
 
 
 
