@@ -25,8 +25,8 @@ def receive_alert():
             f'  fair-queue',
         ]
             send_commands(cmd=qos_commands)
-        else:
-            print('no active Webex session or latency is acceptable, no need to update QoS configuration')
+        elif int(totalParticipant)==0 and int(latency)<100:
+            print('no active Webex session and latency is acceptable, no need to update QoS configuration')
             cmd= [
                 f'no policy-map dynamic',
                 f'policy-map dynamic',
