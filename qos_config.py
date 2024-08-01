@@ -9,17 +9,13 @@ device = {
         'secret': 'C1sco12345'
     }
 
-def send_commands(totalparticipant):
+    
 
-    bw=int(totalparticipant)*1000
+def send_commands(cmd):
 
-    qos_commands = [
-            f'policy-map dynamic',
-            f' class WEBEX',
-            f'  priority {str(bw)}',
-            f' class class-default',
-            f'  fair-queue',
-        ]
+    #bw=int(totalparticipant)*1000
+
+    qos_commands = cmd
     try:
         net_connect = ConnectHandler(**device)
         net_connect.enable()
