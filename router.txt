@@ -1,0 +1,7 @@
+telemetry ietf subscription 101
+ encoding encode-kvgpb
+ filter xpath /interfaces/interface[name=\"GigabitEthernet3\]/statistics/rx-kbps
+ source-address 198.18.24.1
+ stream yang-push
+ update-policy periodic 500
+ receiver ip address 198.18.24.200 57000 protocol grpc-tcp
