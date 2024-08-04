@@ -23,6 +23,8 @@ def receive_alert():
             f'  priority {str(bw)}',
             f' class class-default',
             f'  fair-queue',
+            f'interface gi2',
+            f'service-policy output  dynamic'
         ]
             send_commands(cmd=cmd)
         elif int(totalParticipant)>0 and (int(latency)<10):
@@ -32,6 +34,8 @@ def receive_alert():
                 f'policy-map dynamic',
                 f' class class-default',
                 f'  fair-queue',
+                f'interface gi2',
+                f'service-policy output  dynamic'
             ]
             send_commands(cmd=cmd)
         elif int(totalParticipant)==0 and int(latency)<60:
@@ -41,6 +45,8 @@ def receive_alert():
                 f'policy-map dynamic',
                 f' class class-default',
                 f'  fair-queue',
+                f'interface gi2',
+                f'service-policy output  dynamic'
             ]
             send_commands(cmd=cmd)
         elif int(totalParticipant)==0 and int(latency)>60:
@@ -51,6 +57,8 @@ def receive_alert():
             f'  priority 1000',
             f' class class-default',
             f'  fair-queue',
+            f'interface gi2',
+            f'service-policy output  dynamic'
         ]
             send_commands(cmd=cmd)
         # Return a response to acknowledge receipt
