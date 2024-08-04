@@ -13,7 +13,7 @@ def receive_alert():
         
         latency=data['result']['AverageLatency']
         # Process the received data (e.g., print it, store it, etc.)
-        print(f"Latency exceeded: {data['result']['AverageLatency']}ms")
+        print(f"Latency to Webex: {data['result']['AverageLatency']}ms")
         totalParticipant=get_total_participants()
         if int(totalParticipant)>0 and int(latency)>100:
             bw=int(totalParticipant)*1000
@@ -30,7 +30,7 @@ def receive_alert():
         ]
             send_commands(cmd=cmd)
         elif int(totalParticipant)>0 and (int(latency)<10):
-            print('has active Webex sessions but latency is good, no need to update QoS configuration')
+            print(f'has {totalParticipant} active Webex sessions but latency is good {latency}ms, no need to update QoS configuration')
             cmd= [
                 f'no policy-map dynamic',
                 f'policy-map dynamic',
@@ -52,7 +52,7 @@ def receive_alert():
             ]
             send_commands(cmd=cmd)
         elif int(totalParticipant)==0 and int(latency)>60:
-            print('active Webex session but latency is greater than 60ms, pre-configure the QoS for for any new meeting')
+            print('has no active Webex session but latency is greater than 60ms, pre-configure the QoS for for any new meeting')
             cmd = [
             f'policy-map dynamic',
             f' class WEBEX',
