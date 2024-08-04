@@ -4,6 +4,7 @@ import urllib3
 urllib3.disable_warnings()
 import time
 import json
+from requests import ConnectionError
 
 thousandeyes_token='1f82e605-518c-4d6e-8865-fc40ab903318'
 testId= "296995"
@@ -16,15 +17,19 @@ headers = {
 
 
 def get_latency_to_webex():
-    payload={}  
-    url=f'https://api.thousandeyes.com/v7/endpoint/test-results/scheduled-tests/{testId}/network/filter'
-    response=requests.post(url=url,headers=headers,json=payload)
-    data=response.json()['results'][0]
-    data['destination']='Webex'
-    if response.status_code==200:
-        return data
-    else:
-        return {}
+    payload={}
+    try:  
+        url=f'https://api.thousandeyes.com/v7/endpoint/test-results/scheduled-tests/{testId}/network/filter'
+        response=requests.post(url=url,headers=headers,json=payload)
+        data=response.json()['results'][0]
+        data['destination']='Webex'
+        if response.status_code==200:
+            return data
+        else:
+            return {}
+    except ConnectionError as e:
+        print(e)
+        return "Connection_Error"
     
 
 def send_to_splunk(data):  
@@ -40,7 +45,10 @@ if __name__=='__main__':
     while True:
         data=get_latency_to_webex()
         if data:
-            send_to_splunk(data)
+            if data!="Connection_Error":
+                send_to_splunk(data)
+            else:
+                time.sleep(15)
         else:
             print('nothing to send to Splunk')
         time.sleep(30)
