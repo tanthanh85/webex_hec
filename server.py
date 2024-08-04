@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 from qos_config import *
 from get_meeting_participant import *
-from do_secondary_search import *
+
+
 
 
 app = Flask(__name__)
@@ -18,10 +19,9 @@ def receive_alert():
         print(f"Latency to Webex: {data['result']['AverageLatency']}ms")
         totalParticipant=get_total_participants()
 
-        rx_search_query='index=router metric_name=Cisco-IOS-XE-interfaces-oper:interfaces/interface/statistics.rx_kbps subscription=101 router_source="Internet_Router" | head 5 | stats avg(value) as avgRx'
-        field_alias="avgRx"
-
-        rx_bw=get_search_result(search_query=rx_search_query,field=field_alias)
+        
+        search_name="avgReceive"
+        rx_bw=fetch_saved_search_results(search_name=search_name)
         print(f'RX BW status: {rx_bw}')
         if int(totalParticipant)>0 and int(rx_bw)>9000:
             bw=int(totalParticipant)*1000
