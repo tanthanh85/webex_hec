@@ -21,7 +21,8 @@ def receive_alert():
 
         
         search_name="avgReceive"
-        rx_bw=fetch_saved_search_results(search_name=search_name)
+        print(search_name)
+        rx_bw=fetch_saved_search_results(saved_search_name=search_name)
         print(f'RX BW status: {rx_bw}')
         if int(totalParticipant)>0 and int(rx_bw)>9000:
             bw=int(totalParticipant)*1000
