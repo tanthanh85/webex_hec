@@ -18,6 +18,7 @@ def receive_alert():
         if int(totalParticipant)>0 and int(latency)>100:
             bw=int(totalParticipant)*1000
             remaining_bw=10-int(totalParticipant)*1
+            print(f"Latency to Webex is {latency}m, number of active webex sessions is {totalParticipant}, police bandwidth to {remaining_bw}m")
             cmd = [
             f'no policy-map dynamic',   
             f'policy-map dynamic',
