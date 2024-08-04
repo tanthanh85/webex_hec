@@ -17,24 +17,44 @@ def receive_alert():
         totalParticipant=get_total_participants()
         if int(totalParticipant)>0 and int(latency)>100:
             bw=int(totalParticipant)*1000
-            qos_commands = [
+            cmd = [
             f'policy-map dynamic',
             f' class WEBEX',
             f'  priority {str(bw)}',
             f' class class-default',
             f'  fair-queue',
         ]
-            send_commands(cmd=qos_commands)
-        elif int(totalParticipant)==0 and (int(latency)<100 or int(latency)>100):
-            print('no active Webex session and latency is acceptable, no need to update QoS configuration')
+            send_commands(cmd=cmd)
+        elif int(totalParticipant)>0 and (int(latency)<10):
+            print('has active Webex sessions but latency is good, no need to update QoS configuration')
             cmd= [
                 f'no policy-map dynamic',
                 f'policy-map dynamic',
                 f' class class-default',
                 f'  fair-queue',
             ]
-            
             send_commands(cmd=cmd)
+        elif int(totalParticipant)==0 and int(latency)<60:
+            print('no active Webex session and latency is acceptable (<60), no need to update QoS configuration')
+            cmd= [
+                f'no policy-map dynamic',
+                f'policy-map dynamic',
+                f' class class-default',
+                f'  fair-queue',
+            ]
+            send_commands(cmd=cmd)
+        elif int(totalParticipant)==0 and int(latency)>60:
+            print('no active Webex session but latency is greater than 60ms, pre-configure the QoS for for any new meeting')
+            cmd = [
+            f'policy-map dynamic',
+            f' class WEBEX',
+            f'  priority 1000',
+            f' class class-default',
+            f'  fair-queue',
+        ]
+            send_commands(cmd=cmd)
+
+        
         # Return a response to acknowledge receipt
         return jsonify({"message": "Alert received"}), 200
     except Exception as e:
