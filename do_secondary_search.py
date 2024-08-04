@@ -6,11 +6,11 @@ urllib3.disable_warnings()
 splunk_instance = "https://127.0.0.1:8089"
 username = "admin"
 password = "C1sco12345"
+public_ip="173.39.116.4/30"
 
-
-def get_search_result(search_query,field):
+def get_total_participants():
     # Search query to get the totalparticipantcount from the last 3 minutes
-    # search_query = f'search index=Webex ip={public_ip} earliest=-3m | head 1 | stats latest(totalparticipantcount) as TotalParticipant'
+    search_query = f'search index=Webex ip={public_ip} earliest=-3m | head 1 | stats latest(totalparticipantcount) as TotalParticipant'
 
     # Prepare the Splunk API request
     url = f"{splunk_instance}/services/search/jobs"
@@ -21,7 +21,7 @@ def get_search_result(search_query,field):
     headers = {"Content-Type":"application/json","Accept":"application/json"}
 
     # Make the request to Splunk
-    response = requests.post(url, auth=(username, password), data=data, verify=False,headers=headers)
+    response = requests.post(url, auth=(username, password), data=data, verify=False)
 
     # Check if the request was successful
     if response.status_code == 201:
@@ -40,9 +40,9 @@ def get_search_result(search_query,field):
         if results_response.status_code == 200:
             results = results_response.json()["results"]
             if results:
-                result = results[0].get(f"{field}", "N/A")
-                print(f"result for {field}: {result}")
-                return result
+                total_participant_count = results[0].get("TotalParticipant", "N/A")
+                print(f"Total Participant Count: {total_participant_count}")
+                return total_participant_count
             else:
                 print("No results found.")
                 return 0
@@ -55,9 +55,4 @@ def get_search_result(search_query,field):
 
 
 if __name__=='__main__':
-    public_ip="173.39.116.4/30"
-    field_alias="TotalParticipant"
-    field_name="totalparticipantcount"
-    index="Webex"
-    search_query = f'search index={index} ip={public_ip} earliest=-3m | head 1 | stats latest({field_name}) as {field_alias}'
-    print(get_search_result(search_query=search_query,field=field_alias))
+    print(get_total_participants())
