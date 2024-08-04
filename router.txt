@@ -1,6 +1,6 @@
 telemetry ietf subscription 101
  encoding encode-kvgpb
- filter xpath /interfaces-ios-xe-oper:interfaces/interface[name="GigabitEthernet3"]/statistics/rx-kbps
+ filter xpath /interfaces-ios-xe-oper:interfaces/interface[name="GigabitEthernet3"]/statistics
  source-address 198.18.24.1
  stream yang-push
  update-policy periodic 500
