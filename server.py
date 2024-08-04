@@ -51,14 +51,14 @@ def receive_alert():
                 f'service-policy output  dynamic'
             ]
             send_commands(cmd=cmd)
-        elif int(totalParticipant)==0 and int(latency)>60:
+        elif int(totalParticipant)>0 and int(latency)>60:
             print('no active Webex session but latency is greater than 60ms, pre-configure the QoS for for any new meeting')
             cmd = [
             f'policy-map dynamic',
             f' class WEBEX',
-            f'  priority 1000',
+            f'  priority 2000',
             f' class class-default',
-            f'  fair-queue',
+            f'  police 8m',
             f'interface gi2',
             f'service-policy output  dynamic'
         ]
