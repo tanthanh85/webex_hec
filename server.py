@@ -53,8 +53,6 @@ def receive_alert():
             f'  fair-queue',
         ]
             send_commands(cmd=cmd)
-
-        
         # Return a response to acknowledge receipt
         return jsonify({"message": "Alert received"}), 200
     except Exception as e:
