@@ -1,5 +1,8 @@
 import requests
 
+import urllib3
+urllib3.disable_warnings()
+
 splunk_instance = "https://127.0.0.1:8089"
 username = "admin"
 password = "C1sco12345"
