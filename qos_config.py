@@ -1,5 +1,5 @@
 from netmiko import ConnectHandler
-from get_meeting_participant import *
+
 
 device = {
         'device_type': 'cisco_ios',
@@ -29,9 +29,9 @@ def send_commands(cmd):
         print(f"Error configuring QoS: {str(e)}")
 
 
-if __name__=='__main__':
-    total=get_total_participants()
+# if __name__=='__main__':
+#     total=get_total_participants()
     
-    if int(total)>=1:
-        send_commands(totalparticipant=total)
+#     if int(total)>=1:
+#         send_commands(totalparticipant=total)
     
