@@ -17,12 +17,14 @@ def receive_alert():
         totalParticipant=get_total_participants()
         if int(totalParticipant)>0 and int(latency)>100:
             bw=int(totalParticipant)*1000
+            remaining_bw=10-int(totalParticipant)*1
             cmd = [
+            f'no policy-map dynamic',   
             f'policy-map dynamic',
             f' class WEBEX',
             f'  priority {str(bw)}',
             f' class class-default',
-            f'  fair-queue',
+            f'  police {remaining_bw}m',
             f'interface gi2',
             f'service-policy output  dynamic'
         ]
