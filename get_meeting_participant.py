@@ -36,7 +36,7 @@ def get_total_participants():
         # Get the results of the search
         results_response = requests.get(results_url, auth=(username, password), verify=False)
 
-        print(results_response.text)
+        #print(results_response.text)
         if results_response.status_code == 200:
             results = results_response.json()["results"]
             if results:
