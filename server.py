@@ -23,8 +23,9 @@ def receive_alert():
         search_name="avgReceive"
         print(search_name)
         rx_bw=fetch_saved_search_results(saved_search_name=search_name)
-        print(f'RX BW status: {rx_bw}')
+        #print(f'RX BW status: {rx_bw}')
         if int(totalParticipant)>0 and int(rx_bw)>9000:
+            print(f'Bandwidth is congested: {rx_bw}kbps')
             bw=int(totalParticipant)*1000
             remaining_bw=10-int(totalParticipant)*1
             print(f"Latency to Webex is {latency}m, number of active webex sessions is {totalParticipant}, police bandwidth to {remaining_bw}m")
