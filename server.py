@@ -26,11 +26,11 @@ def receive_alert():
         rx_bw=fetch_saved_search_results(saved_search_name=search_name)
         print(f'downstream bw status: {rx_bw["avgRx"]}kbps')
         if int(totalParticipant)>0 and int(latency)>100:
-            if int(rx_bw)>9000:
-                print(f'Bandwidth is congested: {rx_bw}kbps')
+            if float(rx_bw['avgRx'])>9000:
+                print(f'Bandwidth is congested: {rx_bw["avgRx"]}kbps')
                 bw=int(totalParticipant)*1000
                 remaining_bw=10-int(totalParticipant)*1
-                print(f"Latency to Webex is {latency}m, number of active webex sessions is {totalParticipant}, police bandwidth to {remaining_bw}m")
+                print(f"Latency to Webex is {latency}m, the number of active webex sessions is {totalParticipant}, police bandwidth to {remaining_bw}m")
                 cmd = [
                 f'no policy-map dynamic',   
                 f'policy-map dynamic',
