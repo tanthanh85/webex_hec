@@ -10,7 +10,7 @@ public_ip="173.39.116.4/30"
 
 def get_total_participants():
     # Search query to get the totalparticipantcount from the last 3 minutes
-    search_query = f'search index=Webex ip={public_ip} earliest=-3m | head 1 | stats latest(totalparticipantcount) as TotalParticipant'
+    search_query = f'search index=Webex ip={public_ip} earliest=-2m | head 1 | stats latest(totalparticipantcount) as TotalParticipant'
 
     # Prepare the Splunk API request
     url = f"{splunk_instance}/services/search/jobs"
@@ -44,7 +44,7 @@ def get_total_participants():
                 print(f"Total Participant Count: {total_participant_count}")
                 return total_participant_count
             else:
-                print("No results found.")
+                print("No live meeting found.")
                 return 0
         else:
             print(f"Failed to get search results: {results_response.status_code}")
