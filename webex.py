@@ -6,7 +6,7 @@ import json
 import time
 from requests import ConnectionError
 
-webex_token='NmQxNGM3MTctZWQyMy00MWYxLWIwZjUtMzEyMmFjN2Q3Yzc3MGZiMDRlZjQtODI1_P0A1_eaec46d2-6287-43ac-bac0-1c9058b316db'
+webex_token='Zjc3YjM0NjgtZjRlNi00YmJjLWFjYmItZDI1ZDY2Y2QyMTExYjA0ZjM3N2MtMzAy_P0A1_eaec46d2-6287-43ac-bac0-1c9058b316db'
 webex_checksum='v2_94f9e6a6473d4727b4e9bec3632a31a6'
 splunk_token='480af2b5-20e9-4c02-bcc1-7af5da2107bf'
 
@@ -47,6 +47,7 @@ if __name__=='__main__':
             if data!="Connection_Error":
                 send_to_splunk(data)
             else:
+                print('Connection error to Webex, will retry in 15 seconds')
                 time.sleep(15)
         else:
             print('nothing to send to Splunk')
