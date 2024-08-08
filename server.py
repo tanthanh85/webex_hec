@@ -27,21 +27,19 @@ def receive_alert():
         rx_bw=fetch_saved_search_results(saved_search_name=search_name)
         remaining_bw=10000-float(rx_bw["avgRx"])
         data_bw=10-int(totalParticipant)*1
+        webex_bw=int(totalParticipant)
         print(f'downstream used bandwidth: {rx_bw["avgRx"]}kbps')
-        print(f'required bandwidth for Webex: {int(totalParticipant)*1}000kbps')
+        print(f'required bandwidth for Webex: {str(webex_bw)}000kbps')
         print(f'available bandwidth: {remaining_bw}kbps')
-
-
-            
+     
         if int(totalParticipant)>0:     
-                if int(latency)>100:             
-                    bw=int(totalParticipant)*1000
+                if int(latency)>100 or remaining_bw<float(webex_bw):                             
                     print(f"Latency to Webex is {latency}m which is high or remaining bandwidth is not enough for the number of active webex sessions {totalParticipant}, police data bandwidth to {data_bw}m")
                     cmd = [
                     f'no policy-map dynamic',   
                     f'policy-map dynamic',
                     f' class WEBEX',
-                    f'  priority {str(bw)}',
+                    f'  priority {str(webex_bw)}',
                     f' class class-default',
                     f'  police {data_bw}m',
                     f'interface gi2',
