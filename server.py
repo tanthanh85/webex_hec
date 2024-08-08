@@ -34,7 +34,7 @@ def receive_alert():
      
         if int(totalParticipant)>0:     
                 if int(latency)>100 or remaining_bw<float(webex_bw):                             
-                    print(f"Latency to Webex is {latency}m which is high or remaining bandwidth is not enough for the number of active webex sessions {totalParticipant}, police data bandwidth to {data_bw}m")
+                    print(f"Latency to Webex is high or remaining bandwidth is not enough for the number of active webex sessions {totalParticipant}, police data bandwidth to {data_bw}m")
                     cmd = [
                     f'no policy-map dynamic',   
                     f'policy-map dynamic',
