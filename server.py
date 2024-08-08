@@ -3,7 +3,8 @@ from qos_config import *
 from get_meeting_participant import *
 
 
-
+current=0
+update=False
 
 app = Flask(__name__)
 
@@ -19,32 +20,41 @@ def receive_alert():
         # Process the received data (e.g., print it, store it, etc.)
         print(f"Latency to Webex: {data['result']['AverageLatency']}ms")
         totalParticipant=get_total_participants()
-
+        if totalParticipant!=current:
+            current=totalParticipant
+            update=True
+        
         
         search_name="avgReceive"
         #print(search_name)
         rx_bw=fetch_saved_search_results(saved_search_name=search_name)
         print(f'downstream bw status: {rx_bw["avgRx"]}kbps')
-        if int(totalParticipant)>0 and int(latency)>100:
-            if float(rx_bw['avgRx'])>9000:
-                print(f'Bandwidth is congested: {rx_bw["avgRx"]}kbps')
-                bw=int(totalParticipant)*1000
-                remaining_bw=10-int(totalParticipant)*1
-                print(f"Latency to Webex is {latency}m, the number of active webex sessions is {totalParticipant}, police bandwidth to {remaining_bw}m")
-                cmd = [
-                f'no policy-map dynamic',   
-                f'policy-map dynamic',
-                f' class WEBEX',
-                f'  priority {str(bw)}',
-                f' class class-default',
-                f'  police {remaining_bw}m',
-                f'interface gi2',
-                f'service-policy output  dynamic'
-            ]
-                send_commands(cmd=cmd)
+        if update==True:
+            print('Live participant count changes, updating the QoS configuration....')
+
+        if int(current)>0 and int(latency)>100:
+            if int(latency)>150:
+                if float(rx_bw['avgRx'])>3000:
+                    print(f'Bandwidth is not congested yet: {rx_bw["avgRx"]}kbps but high latency')
+                    bw=int(current)*1000
+                    remaining_bw=10-int(current)*1
+                    print(f"Latency to Webex is {latency}m, the number of active webex sessions is {totalParticipant}, police bandwidth to {remaining_bw}m")
+                    cmd = [
+                    f'no policy-map dynamic',   
+                    f'policy-map dynamic',
+                    f' class WEBEX',
+                    f'  priority {str(bw)}',
+                    f' class class-default',
+                    f'  police {remaining_bw}m',
+                    f'interface gi2',
+                    f'service-policy output  dynamic'
+                ]
+                    send_commands(cmd=cmd)
+                else:
+                    print('latency is high but not because of downstream congestion')
             else:
-                print('latency is high but not because of downstream congestion')
-        elif int(totalParticipant)==0 and int(latency)<60:
+                print('latency is not so high to apply the QoS urgently')
+        elif int(current)==0 and int(latency)<60:
             print('no active Webex session and latency is acceptable (<60), no need to update QoS configuration')
             cmd= [
                 f'no policy-map dynamic',
@@ -55,8 +65,8 @@ def receive_alert():
                 f'service-policy output  dynamic'
             ]
             send_commands(cmd=cmd)
-        elif int(totalParticipant)==0 and int(latency)>60:
-            print('has no active Webex session but latency is greater than 60ms, pre-configure the QoS for for any new meeting')
+        elif int(current)==0 and int(latency)>60:
+            print('has no active Webex session but latency is greater than 60ms, pre-configure the QoS for for any new meeting. Can use AI to predict the total live participants')
             cmd = [
             f'policy-map dynamic',
             f' class WEBEX',

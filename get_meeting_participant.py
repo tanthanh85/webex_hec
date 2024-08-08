@@ -41,7 +41,7 @@ def get_total_participants():
             results = results_response.json()["results"]
             if results:
                 total_participant_count = results[0].get("TotalParticipant", "N/A")
-                print(f"Total Participant Count: {total_participant_count}")
+                print(f"Live Participant Count: {total_participant_count}")
                 return total_participant_count
             else:
                 print("No live meeting found.")
