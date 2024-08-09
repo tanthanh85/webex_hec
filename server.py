@@ -27,9 +27,9 @@ def receive_alert():
         rx_bw=fetch_saved_search_results(saved_search_name=search_name)
         remaining_bw=10000-float(rx_bw["avgRx"])
         data_bw=10-int(totalParticipant)*1
-        webex_bw=int(totalParticipant)
+        webex_bw=int(totalParticipant)*1000
         print(f'downstream used bandwidth: {rx_bw["avgRx"]}kbps')
-        print(f'required bandwidth for Webex: {str(webex_bw)}000kbps')
+        print(f'required bandwidth for Webex: {str(webex_bw)}kbps')
         print(f'available bandwidth: {remaining_bw}kbps')
      
         if int(totalParticipant)>0:     
