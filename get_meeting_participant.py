@@ -3,9 +3,16 @@ import requests
 import urllib3
 urllib3.disable_warnings()
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+username=os.getenv('username')
+password=os.getenv('password')
+
 splunk_instance = "https://127.0.0.1:8089"
-username = "admin"
-password = "C1sco12345"
+
 public_ip="173.39.116.4/30"
 
 def get_total_participants():

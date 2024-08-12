@@ -3,9 +3,16 @@ import requests
 import urllib3
 urllib3.disable_warnings()
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+username=os.getenv('username')
+password=os.getenv('password')
+
 splunk_instance = "https://127.0.0.1:8089"
-username = "admin"
-password = "C1sco12345"
+
 
 
 def fetch_saved_search_results(saved_search_name):

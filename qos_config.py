@@ -1,12 +1,18 @@
 from netmiko import ConnectHandler
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+username=os.getenv('username')
+password=os.getenv('password')
 
 device = {
         'device_type': 'cisco_ios',
         'host': '198.18.24.1',
-        'username': 'admin',
-        'password': 'C1sco12345',
-        'secret': 'C1sco12345'
+        'username': username,
+        'password': password,
+        'secret': password
     }
 
     
