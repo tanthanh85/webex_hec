@@ -26,7 +26,7 @@ def receive_alert():
         #print(search_name)
         rx_bw=fetch_saved_search_results(saved_search_name=search_name)
         remaining_bw=10000-float(rx_bw["avgRx"])
-        data_bw=10-int(totalParticipant)*1
+        data_bw=10-int(totalParticipant)*1-3
         webex_bw=int(totalParticipant)*1000
         print(f'downstream used bandwidth: {rx_bw["avgRx"]}kbps')
         print(f'required bandwidth for Webex: {str(webex_bw)}kbps')
@@ -59,17 +59,17 @@ def receive_alert():
             ]
             send_commands(cmd=cmd)
         elif int(totalParticipant)==0 and int(latency)>60:
-            print('has no active Webex session but latency is greater than 60ms, pre-configure the QoS for for any new meeting. Can use AI to predict the total live participants')
-            cmd = [
-            f'policy-map dynamic',
-            f' class WEBEX',
-            f'  priority 2000',
-            f' class class-default',
-            f'  police 8m',
-            f'interface gi2',
-            f'service-policy output  dynamic'
-        ]
-            send_commands(cmd=cmd)
+            print('has no active Webex session but latency is greater than 60ms, please consider to use AI to estimate the no of webex sessions')
+        #     cmd = [
+        #     f'policy-map dynamic',
+        #     f' class WEBEX',
+        #     f'  priority 2000',
+        #     f' class class-default',
+        #     f'  police 8m',
+        #     f'interface gi2',
+        #     f'service-policy output  dynamic'
+        # ]
+        #     send_commands(cmd=cmd)
         # Return a response to acknowledge receipt
         return jsonify({"message": "Alert received"}), 200
     except Exception as e:
