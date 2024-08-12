@@ -6,7 +6,7 @@ import time
 import json
 from requests import ConnectionError
 import os
-
+from json.decoder import JSONDecodeError
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -34,6 +34,9 @@ def get_latency_to_webex():
         print(e)
         return "Connection_Error"
     
+    except JSONDecodeError as e:
+        print(e)
+        return "JSON_Error"
 
 def send_to_splunk(data):  
     url='https://127.0.0.1:8088/services/collector/event'
@@ -48,13 +51,13 @@ if __name__=='__main__':
     while True:
         data=get_latency_to_webex()
         if data:
-            if data!="Connection_Error":
+            if data!="Connection_Error" or data!="JSON_Error":
                 send_to_splunk(data)
             else:
-                time.sleep(15)
+                time.sleep(10)
         else:
             print('nothing to send to Splunk')
-        time.sleep(60)
+        time.sleep(30)
 
 
 
