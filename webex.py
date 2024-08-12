@@ -5,10 +5,14 @@ from pprint import pprint
 import json
 import time
 from requests import ConnectionError
+import os
+from dotenv import load_dotenv
 
-webex_token='NzFlNTU0MWUtZGNjOC00MjlhLWEyMzctY2VlY2EyNDgzZDliMjI1MmM2M2MtMmJh_P0A1_eaec46d2-6287-43ac-bac0-1c9058b316db'
-webex_checksum='v2_94f9e6a6473d4727b4e9bec3632a31a6'
-splunk_token='480af2b5-20e9-4c02-bcc1-7af5da2107bf'
+load_dotenv()
+
+webex_token=os.getenv('webex_token')
+webex_checksum=os.getenv('webex_checksum')
+splunk_token=os.getenv('webex_splunk_token')
 
 
 def get_live_meeting():

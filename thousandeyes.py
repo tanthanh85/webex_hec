@@ -5,16 +5,19 @@ urllib3.disable_warnings()
 import time
 import json
 from requests import ConnectionError
+import os
 
-thousandeyes_token='1f82e605-518c-4d6e-8865-fc40ab903318'
+from dotenv import load_dotenv
+
+load_dotenv()
+
+thousandeyes_token=os.getenv('thousandeyes_token')
+splunk_token=os.getenv('thousandeyes_splunk_token')
 testId= "296995"
-splunk_token='8626afc9-5d78-4d21-ab0e-d8020ba1e91b'
+
 headers = {
   'Authorization': f'Bearer {thousandeyes_token}'
 }
-
-
-
 
 def get_latency_to_webex():
     payload={}
