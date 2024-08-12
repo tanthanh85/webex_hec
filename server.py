@@ -33,19 +33,19 @@ def receive_alert():
         print(f'available bandwidth: {remaining_bw}kbps')
      
         if int(totalParticipant)>0:     
-                if int(latency)>100 or remaining_bw<float(webex_bw):                             
-                    print(f"Latency to Webex is high or remaining bandwidth is not enough for the number of active webex sessions {totalParticipant}, police data bandwidth to {data_bw}m")
-                    cmd = [
-                    f'no policy-map dynamic',   
-                    f'policy-map dynamic',
-                    f' class WEBEX',
-                    f'  priority {str(webex_bw)}',
-                    f' class class-default',
-                    f'  police {data_bw}m',
-                    f'interface gi2',
-                    f'service-policy output  dynamic'
-                    ]
-                    send_commands(cmd=cmd)
+            if int(latency)>100 or remaining_bw<float(webex_bw):                             
+                print(f"Latency to Webex is high or remaining bandwidth is not enough for the number of active webex sessions {totalParticipant}, police data bandwidth to {data_bw}m")
+                cmd = [
+                f'no policy-map dynamic',   
+                f'policy-map dynamic',
+                f' class WEBEX',
+                f'  priority {str(webex_bw)}',
+                f' class class-default',
+                f'  police {data_bw}m',
+                f'interface gi2',
+                f'service-policy output  dynamic'
+                ]
+                send_commands(cmd=cmd)
                      
         elif int(totalParticipant)==0 and int(latency)<60:
             print('no active Webex session and latency is acceptable (<60), no need to update QoS configuration')
