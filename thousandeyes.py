@@ -63,10 +63,10 @@ if __name__=='__main__':
             if data!="Connection_Error" or data!="JSON_Error" or data!="Timeout":
                 send_to_splunk(data)
             else:
-                time.sleep(3)
+                time.sleep(2)
         else:
             print('nothing to send to Splunk')
-        time.sleep(60)
+        time.sleep(15)
 
 
 
