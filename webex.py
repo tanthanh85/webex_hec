@@ -7,6 +7,7 @@ import time
 from requests import ConnectionError
 import os
 from dotenv import load_dotenv
+from json.decoder import JSONDecodeError
 
 load_dotenv()
 
@@ -34,6 +35,9 @@ def get_live_meeting():
     except ConnectionError as e:
         print(e)
         return "Connection_Error"
+    except JSONDecodeError as e:
+        print(e)
+        return "JSON_Error"
 
 def send_to_splunk(data):
     url='https://127.0.0.1:8088/services/collector/event'
@@ -48,7 +52,7 @@ if __name__=='__main__':
     while True:
         data=get_live_meeting()
         if data:
-            if data!="Connection_Error":
+            if data!="Connection_Error" or data!="JSON_Error":
                 send_to_splunk(data)
             else:
                 print('Connection error to Webex, will retry in 60 seconds')
