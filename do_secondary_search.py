@@ -17,8 +17,10 @@ splunk_instance = "https://127.0.0.1:8089"
 
 def fetch_saved_search_results(saved_search_name):
     search_url = f'{splunk_instance}/servicesNS/admin/search/saved/searches/{saved_search_name}/dispatch?output_mode=json'
-    response = requests.post(search_url, auth=(username, password), verify=False)
-    
+    try:
+        response = requests.post(search_url, auth=(username, password), verify=False,timeout=5)
+    except requests.exceptions.Timeout:
+        print("Timeout fetching data from Splunk")
     if response.status_code==201:
         sid = response.json()['sid']
     #   print(sid)

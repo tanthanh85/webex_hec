@@ -28,8 +28,10 @@ def get_total_participants():
     headers = {"Content-Type":"application/json","Accept":"application/json"}
 
     # Make the request to Splunk
-    response = requests.post(url, auth=(username, password), data=data, verify=False)
-
+    try:
+        response = requests.post(url, auth=(username, password), data=data, verify=False,timeout=5)
+    except requests.exceptions.Timeout:
+        print("Timeout fetching meeting info from Splunk")
     # Check if the request was successful
     if response.status_code == 201:
         job_id = response.json()["sid"]

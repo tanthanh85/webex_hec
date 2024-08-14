@@ -23,12 +23,14 @@ def get_live_meeting():
         "Content-Type":"application/json"}
         payload = {"siteIds":[]}
         response = requests.post(url=url,headers=headers,json=payload)
+        response.raise_for_status()
         data=response.json()
         if response.status_code==200:
             if data['liveMeetingCount'] > 0:
                 new_payload={"siteIds":[],"kpiResponseId":data['kpiResponseId']}
                 new_url='https://wapmats.webex.com/pcs/api/v3/liveKPIForTopBadIps?checksum='+webex_checksum
-                response = requests.post(url=new_url,headers=headers,json=new_payload)
+                response = requests.post(url=new_url,headers=headers,json=new_payload,timeout=5)
+                response.raise_for_status()
                 return response.json()
             else:
                 return {}
@@ -38,6 +40,9 @@ def get_live_meeting():
     except JSONDecodeError as e:
         print(e)
         return "JSON_Error"
+    except requests.exceptions.Timeout:
+        return "Timeout"
+
 
 def send_to_splunk(data):
     url='https://127.0.0.1:8088/services/collector/event'
@@ -45,18 +50,22 @@ def send_to_splunk(data):
     "Content-Type":"application/json"}
     print(data)
     for participant in data:
-        requests.post(url=url,headers=headers,data=json.dumps({"event": participant}),verify=False)
-        
+        try:
+            response=requests.post(url=url,headers=headers,data=json.dumps({"event": participant}),verify=False,timeout=5)
+            response.raise_for_status()
+        except requests.exceptions.Timeout as e:
+            print(e)
+            print("Connection timeout to Splunk")
 
 if __name__=='__main__':
     while True:
         data=get_live_meeting()
         if data:
-            if data!="Connection_Error" or data!="JSON_Error":
+            if data!="Connection_Error" or data!="JSON_Error" or data!="Timeout":
                 send_to_splunk(data)
             else:
-                print('Connection error to Webex, will retry in 60 seconds')
-                time.sleep(60)
+                print('Connection error to Webex, will retry in 20 seconds')
+                time.sleep(20)
         else:
             print('nothing to send to Splunk')
         time.sleep(20)
