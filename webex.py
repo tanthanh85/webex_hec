@@ -42,8 +42,10 @@ def get_live_meeting():
         return "JSON_Error"
     except requests.exceptions.Timeout:
         return "Timeout"
-
-
+    except requests.exceptions.HTTPError as e:
+        print(e)
+        print("HTTP error")
+        return "HTTP_Error"
 def send_to_splunk(data):
     url='https://127.0.0.1:8088/services/collector/event'
     headers = {"Authorization": "Splunk "+splunk_token,
@@ -61,7 +63,7 @@ if __name__=='__main__':
     while True:
         data=get_live_meeting()
         if data:
-            if data!="Connection_Error" or data!="JSON_Error" or data!="Timeout":
+            if data!="Connection_Error" or data!="JSON_Error" or data!="Timeout" or data!="HTTP_Error":
                 send_to_splunk(data)
             else:
                 print('Connection error to Webex, will retry in 20 seconds')

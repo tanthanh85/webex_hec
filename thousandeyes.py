@@ -47,7 +47,7 @@ def send_to_splunk(data):
     headers = {"Authorization": "Splunk "+splunk_token,
     "Content-Type":"application/json"}
     print(data)
-    print("\n\n\n")
+    print("\n")
     try:
         response=requests.post(url=url,headers=headers,data=json.dumps({"event": data}),verify=False, timeout=5)
         response.raise_for_status()
