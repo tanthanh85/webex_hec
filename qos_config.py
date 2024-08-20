@@ -28,7 +28,7 @@ def send_commands(cmd):
         # Send configuration commands
         output = net_connect.send_config_set(qos_commands)
         print(output)
-
+        net_connect.save_config()
         # Disconnect from device
         net_connect.disconnect()
     except Exception as e:

@@ -41,6 +41,8 @@ def get_latency_to_webex():
 
     except requests.exceptions.Timeout:
         return "Timeout"
+    except requests.exceptions.HTTPError:
+        return "HTTP_Error"
     
 def send_to_splunk(data):  
     url='https://127.0.0.1:8088/services/collector/event'
@@ -62,6 +64,9 @@ if __name__=='__main__':
         if data:
             if data!="Connection_Error" or data!="JSON_Error" or data!="Timeout":
                 send_to_splunk(data)
+            elif data=="HTTP_Error":
+                time.sleep(30)
+                print("HTTP error")
             else:
                 time.sleep(2)
         else:
