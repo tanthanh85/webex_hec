@@ -62,13 +62,23 @@ if __name__=='__main__':
     while True:
         data=get_latency_to_webex()
         if data:
-            if data!="Connection_Error" or data!="JSON_Error" or data!="Timeout":
-                send_to_splunk(data)
-            elif data=="HTTP_Error":
-                time.sleep(30)
-                print("HTTP error")
+            # if data!="Connection_Error" or data!="JSON_Error" or data!="Timeout":
+            #     send_to_splunk(data)
+            if data=="HTTP_Error":
+                
+                print("HTTP error. Will try again in 10s")
+                time.sleep(20)
+            elif data=="JSON_Error":
+                
+                print("JSON error. Will try again in 10s")
+                time.sleep(20)
+
+            elif data=="Timeout":
+                print("Connection timeout. Will try again in 10s")
+                time.sleep(10)
+        
             else:
-                time.sleep(2)
+                send_to_splunk(data)
         else:
             print('nothing to send to Splunk')
         time.sleep(15)
