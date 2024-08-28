@@ -67,15 +67,15 @@ if __name__=='__main__':
             if data=="HTTP_Error":
                 
                 print("HTTP error. Will try again in 10s")
-                time.sleep(20)
+                time.sleep(10)
             elif data=="JSON_Error":
                 
                 print("JSON error. Will try again in 10s")
-                time.sleep(20)
+                time.sleep()
 
             elif data=="Timeout":
-                print("Connection timeout. Will try again in 10s")
-                time.sleep(10)
+                print("Connection timeout. Will try again in 5s")
+                time.sleep(5)
         
             else:
                 send_to_splunk(data)

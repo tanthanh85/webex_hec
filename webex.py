@@ -8,6 +8,7 @@ from requests import ConnectionError
 import os
 from dotenv import load_dotenv
 from json.decoder import JSONDecodeError
+from datetime import datetime
 
 load_dotenv()
 
@@ -52,7 +53,7 @@ def send_to_splunk(data):
     url='https://127.0.0.1:8088/services/collector/event'
     headers = {"Authorization": "Splunk "+splunk_token,
     "Content-Type":"application/json"}
-    print(data)
+    print(f'datetime.now(): {data}')
     if data!="HTTP_Error":
         for participant in data:
             try:
@@ -71,10 +72,10 @@ if __name__=='__main__':
             #     send_to_splunk(data)
             if data=="HTTP_Error":
                 print("HTTP error, please input new token")
-                time.sleep(3600)
+                time.sleep(7200)
             elif data=="Client_Error":
                 print("Client Error. Please update Webex token")
-                time.sleep(3600)
+                time.sleep(7200)
             elif data=="Connection_Error":
                 print("Connection Error. Will retry in 60s")
                 time.sleep(60)
@@ -83,9 +84,9 @@ if __name__=='__main__':
                 time.sleep(10)
             else:
                 send_to_splunk(data)
-                time.sleep(20)
+                #time.sleep(20)
         else:
-            print('nothing to send to Splunk')
+            print(f'{datetime.now()} no active Webex participants now in the office')
         time.sleep(20)
     
     
